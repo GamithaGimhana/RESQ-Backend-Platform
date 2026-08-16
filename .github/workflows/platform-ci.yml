@@ -1,0 +1,44 @@
+name: RESQ Platform CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    name: Build & Test Platform Components
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code with Submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Test Config Server
+        run: mvn clean test -f config-server/pom.xml
+
+      - name: Test Eureka Server
+        run: mvn clean test -f eureka-server/pom.xml
+
+      - name: Test API Gateway
+        run: mvn clean test -f api-gateway/pom.xml
+
+      - name: Authenticate to Google Cloud via WIF
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: 'projects/resq-enterprise-cloud/locations/global/workloadIdentityPools/resq-github-pool/providers/resq-github-provider'
+          service_account: 'resq-cicd-deployer@resq-enterprise-cloud.iam.gserviceaccount.com'
+
+      - name: Set up Cloud SDK
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: google-github-actions/setup-gcloud@v2
