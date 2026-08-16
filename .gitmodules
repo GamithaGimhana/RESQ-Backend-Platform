@@ -1,0 +1,9 @@
+[submodule "config-server"]
+	path = config-server
+	url = ../repos/resq-config-server
+[submodule "eureka-server"]
+	path = eureka-server
+	url = ../repos/resq-eureka-server
+[submodule "api-gateway"]
+	path = api-gateway
+	url = ../repos/resq-api-gateway
