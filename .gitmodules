@@ -1,9 +1,9 @@
 [submodule "config-server"]
 	path = config-server
-	url = ../repos/resq-config-server
+	url = https://github.com/GamithaGimhana/RESQ-Platform-Config-Server.git
 [submodule "eureka-server"]
 	path = eureka-server
-	url = ../repos/resq-eureka-server
+	url = https://github.com/GamithaGimhana/RESQ-Platform-Service-Registry.git
 [submodule "api-gateway"]
 	path = api-gateway
-	url = ../repos/resq-api-gateway
+	url = https://github.com/GamithaGimhana/RESQ-Platform-Api-Gateway.git
