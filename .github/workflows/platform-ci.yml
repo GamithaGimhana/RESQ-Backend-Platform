@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   build-and-test:
     name: Build & Test Platform Components
@@ -23,22 +27,18 @@ jobs:
           distribution: 'oracle'
           cache: maven
 
-      - name: Test Config Server
-        run: mvn clean test -f config-server/pom.xml
-
-      - name: Test Eureka Server
-        run: mvn clean test -f eureka-server/pom.xml
-
-      - name: Test API Gateway
-        run: mvn clean test -f api-gateway/pom.xml
+      - name: Build & Test Multi-Module Platform Services
+        run: mvn clean test -Dspring.classformat.ignore=true
 
       - name: Authenticate to Google Cloud via WIF
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        continue-on-error: true
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: 'projects/resq-enterprise-cloud/locations/global/workloadIdentityPools/resq-github-pool/providers/resq-github-provider'
-          service_account: 'resq-cicd-deployer@resq-enterprise-cloud.iam.gserviceaccount.com'
+          workload_identity_provider: 'projects/resq-enterprise-cloud-01/locations/global/workloadIdentityPools/resq-github-pool/providers/resq-github-provider'
+          service_account: 'resq-cicd-deployer@resq-enterprise-cloud-01.iam.gserviceaccount.com'
 
       - name: Set up Cloud SDK
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        continue-on-error: true
         uses: google-github-actions/setup-gcloud@v2
