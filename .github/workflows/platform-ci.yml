@@ -15,12 +15,15 @@ jobs:
     name: Build & Test Platform Components
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code with Submodules
+      - name: Checkout Code
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
-      - name: Set up Java 25
+      - name: Initialize Submodules
+        run: |
+          git submodule sync
+          git submodule update --init --recursive
+
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           java-version: '25'
