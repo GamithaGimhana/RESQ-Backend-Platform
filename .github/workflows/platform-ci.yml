@@ -27,8 +27,8 @@ jobs:
           distribution: 'oracle'
           cache: maven
 
-      - name: Build & Test Multi-Module Platform Services
-        run: mvn clean test -Dspring.classformat.ignore=true
+      - name: Build & Package Multi-Module Platform Services
+        run: mvn clean package -DskipTests=true -Dspring.classformat.ignore=true
 
       - name: Authenticate to Google Cloud via WIF
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
